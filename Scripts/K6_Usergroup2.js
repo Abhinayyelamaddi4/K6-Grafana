@@ -6,12 +6,8 @@ import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporte
 const BASE_URL = __ENV.BASE_URL || 'http://test.k6.io';
 
 export const options = {
-    // ramp-up = users joining , ramp-down =users leaving 
-    stages: [
-        { duration: '5s', target: 3 }, // ramp-up stage --> virtual users will ramp up gradually to 5
-        { duration: '10s', target: 3 }, // steady stage  --> test will run with maximum load
-        { duration: '5s', target: 0 }, // ramp-down stage] --> virtual users will ramp down gradually to 0 and test will end
-    ],
+    vus: 3,
+    duration: '10s',
 
     thresholds: {
 
@@ -25,7 +21,7 @@ export default function () {
         const response = http.get(BASE_URL);
         check(response, {
             'status is 200': (r) => r.status === 200,
-            'body is not empty': (r) => r.body.length > 0, // size ( === 11 )
+            'body is not empty': (r) => r.body.length > 0,
         });
     });
     sleep(1)

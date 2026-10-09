@@ -3,9 +3,9 @@ import { sleep, check, group } from 'k6'
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 
 const TRAFFIC_SPLIT = {
-    home: 0.5, // 50% of traffic will go to home page
-    news: 0.3, // 30% of traffic will go to news page
-    blogs: 0.2, // 20% of traffic will go to blogs page
+    home: 0.5,
+    contacts: 0.3,
+    blogs: 0.2,
 }
 
 const BASE_URL = __ENV.BASE_URL || 'http://test.k6.io';
@@ -40,11 +40,11 @@ export default function () {
         sleep(1)
     }
 
-    else if (random < TRAFFIC_SPLIT.home + TRAFFIC_SPLIT.news) {
-        group('open news page', () => {
-            const response = http.get(`${BASE_URL}/news.php`);
+    else if (random < TRAFFIC_SPLIT.page + TRAFFIC_SPLIT.contacts) {
+        group('open contacts page', () => {
+            const response = http.get(`${BASE_URL}/contacts.php`);
             check(response, {
-                'news loaded correctly': (r) => r.status === 200,
+                'contacts loaded correctly': (r) => r.status === 200,
 
             });
         });
@@ -61,8 +61,8 @@ export default function () {
         sleep(1)
     }
 }
-    export function handleSummary(data) { // explicitly display the function to K6 by handling the summary of the test results
-        return {  // return an object with the report file name with generated HTML report
-            "report2.html": htmlReport(data),
-        }
+export function handleSummary(data) { // explicitly display the function to K6 by handling the summary of the test results
+    return {  // return an object with the report file name with generated HTML report
+        "report2.html": htmlReport(data),
     }
+}
